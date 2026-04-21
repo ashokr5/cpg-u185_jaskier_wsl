@@ -65,7 +65,6 @@ LDFLAGS += -specs=nano.specs
 LDFLAGS += -T$(LINKER_SCRIPT)
 LDFLAGS += -Wl,--gc-sections
 LDFLAGS += -Wl,--print-memory-usage
-LDFLAGS += -Wl,--strict-libraries
 LDFLAGS += -lc -lm -lnosys
 LDFLAGS += -Wl,-Map=$(BIN_DIR)/$(PROJECT_NAME).map
 
@@ -96,10 +95,10 @@ SOURCES += Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c
 SOURCES += Drivers/BSP/STM32F4xx-Nucleo/stm32f4xx_nucleo.c
 
 # Startup File (Assembler)
-STARTUP_ASM = EWARM/startup_stm32f401xe.s
+STARTUP_ASM = Startup/startup_stm32f401xe_gcc.s
 
 # Linker Script
-LINKER_SCRIPT = EWARM/stm32f401xe_flash.icf
+LINKER_SCRIPT = Linker/stm32f401xe_flash.ld
 
 # Optional: If using a .ld linker script instead of .icf
 # LINKER_SCRIPT = Linker/stm32f401xe_flash.ld
@@ -123,13 +122,16 @@ all: $(ELF) $(BIN) $(HEX) $(LST) size
 
 # Create Build Directories
 $(OBJ_DIR):
-	@mkdir -p $(OBJ_DIR) $(addprefix $(OBJ_DIR)/,Src Drivers/STM32F4xx_HAL_Driver/Src Drivers/BSP/STM32F4xx-Nucleo EWARM)
+	@mkdir -p $(OBJ_DIR) $(addprefix $(OBJ_DIR)/,Src Drivers/STM32F4xx_HAL_Driver/Src Drivers/BSP/STM32F4xx-Nucleo Startup)
 
 $(BIN_DIR):
 	@mkdir -p $(BIN_DIR)
 
 $(LST_DIR):
 	@mkdir -p $(LST_DIR)
+
+$(DEPS_DIR):
+	@mkdir -p $(DEPS_DIR) $(addprefix $(DEPS_DIR)/,Src Drivers/STM32F4xx_HAL_Driver/Src Drivers/BSP/STM32F4xx-Nucleo Startup)
 
 # Compile C Source Files
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR) $(DEPS_DIR)
@@ -158,7 +160,7 @@ $(HEX): $(ELF)
 	@$(OC) -O ihex $< $@
 
 # Generate List File
-$(LST): $(ELF)
+$(LST): $(ELF) | $(LST_DIR)
 	@echo [OD] Generating listing: $@
 	@$(OD) -S $< > $@
 

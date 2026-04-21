@@ -39,8 +39,6 @@
 #define EPD_BSY_GPIO_Port GPIOA
 
 /* Exported macro - Function declarations */
-void SystemClock_Config(void);
-void Error_Handler(void);
 extern SPI_HandleTypeDef hspi1;
 extern volatile int lock_status;
 
