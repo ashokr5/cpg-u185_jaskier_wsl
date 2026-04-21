@@ -70,10 +70,10 @@ LDFLAGS += -Wl,-Map=$(BIN_DIR)/$(PROJECT_NAME).map
 
 # Include Paths
 INCLUDES = -I../application/Inc
-INCLUDES += -I../Drivers/CMSIS/Include
-INCLUDES += -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include
-INCLUDES += -I../Drivers/STM32F4xx_HAL_Driver/Inc
-INCLUDES += -I../Drivers/BSP/STM32F4xx-Nucleo
+INCLUDES += -I../drivers/CMSIS/Include
+INCLUDES += -I../drivers/CMSIS/Device/ST/STM32F4xx/Include
+INCLUDES += -I../drivers/STM32F4xx_HAL_Driver/Inc
+INCLUDES += -I../drivers/BSP/STM32F4xx-Nucleo
 
 # Source Files - Application
 SOURCES = ../application/Src/main.c
@@ -83,16 +83,16 @@ SOURCES += ../application/Src/eink.c
 SOURCES += ../application/Src/images.c
 
 # Source Files - HAL (minimal set needed for GPIO and system clock)
-SOURCES += ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
-SOURCES += ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c
-SOURCES += ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c
-SOURCES += ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c
-SOURCES += ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c
-SOURCES += ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c
-SOURCES += ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c
+SOURCES += ../drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
+SOURCES += ../drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c
+SOURCES += ../drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c
+SOURCES += ../drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c
+SOURCES += ../drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c
+SOURCES += ../drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c
+SOURCES += ../drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c
 
 # Source Files - BSP
-SOURCES += ../Drivers/BSP/STM32F4xx-Nucleo/stm32f4xx_nucleo.c
+SOURCES += ../drivers/BSP/STM32F4xx-Nucleo/stm32f4xx_nucleo.c
 
 # Startup File (Assembler)
 STARTUP_ASM = startup_stm32f401xe.s
@@ -119,7 +119,7 @@ all: $(ELF) $(BIN) $(HEX) $(LST) size
 
 # Create Build Directories
 $(OBJ_DIR):
-	@mkdir -p $(OBJ_DIR) $(addprefix $(OBJ_DIR)/,../application/Src ../Drivers/STM32F4xx_HAL_Driver/Src ../Drivers/BSP/STM32F4xx-Nucleo)
+	@mkdir -p $(OBJ_DIR) $(addprefix $(OBJ_DIR)/,../application/Src ../drivers/STM32F4xx_HAL_Driver/Src ../drivers/BSP/STM32F4xx-Nucleo)
 
 $(BIN_DIR):
 	@mkdir -p $(BIN_DIR)
@@ -128,7 +128,7 @@ $(LST_DIR):
 	@mkdir -p $(LST_DIR)
 
 $(DEPS_DIR):
-	@mkdir -p $(DEPS_DIR) $(addprefix $(DEPS_DIR)/,../application/Src ../Drivers/STM32F4xx_HAL_Driver/Src ../Drivers/BSP/STM32F4xx-Nucleo)
+	@mkdir -p $(DEPS_DIR) $(addprefix $(DEPS_DIR)/,../application/Src ../drivers/STM32F4xx_HAL_Driver/Src ../drivers/BSP/STM32F4xx-Nucleo)
 
 # Compile C Source Files
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR) $(DEPS_DIR)
